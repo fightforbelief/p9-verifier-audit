@@ -19,3 +19,7 @@ The main comparison uses equally costly binary judgments. We additionally study 
 ### Follow-up after the AceMath replay
 
 The sign for Gaokao changes across N under the specified uniform-tie policy. To assess this finding, compute full-grade gaps under file-order and reversed file-order tie priority and under independent extreme within-score permutations for each verifier. Report the diagnostic for every subject and budget. This is an exploratory robustness check.
+
+### Alternative unit of work
+
+After inspecting the AceMath replay, add a question-level sensitivity. One error-free question check returns all its answer grades. Order questions by the sum of absolute answer-mass differences. Allow changing all answer judgments within each affected question for the question-level erasure radius. The number of problems checked and the number of individual grades checked are distinct cost units.
