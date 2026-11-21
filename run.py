@@ -10,7 +10,7 @@ from math import comb
 from pathlib import Path
 import sys
 
-from audit import mass, summarize, tie_scale
+from audit import mass, summarize, tie_scale, tier_design
 from fetch_data import SETS, MODELS, ace_names
 
 DATA = Path("data")
@@ -120,6 +120,13 @@ def study(dataset):
         results[draws] = dict(answer=summarize(answers,full),candidate=summarize(candidates,full),
                               conflicting_groups=conflicts,affected_rows=ambiguous_rows,
                               conflict_width=conflict_mass/full)
+        tiers={}
+        for percent in (1,10):
+            effort=len(answers)*percent//100
+            for cost in (2,5):
+                res=tier_design([(a-b,y) for a,b,y in answers],effort,cost,5)
+                tiers[f"{percent}pct_cost{cost}"]={k:(v if k in ("gold","regular") else v/full) for k,v in res.items()}
+        results[draws]["tiers"]=tiers
     with (OUT/f"{dataset}_problems.csv").open("w",newline="") as f:
         writer = csv.writer(f)
         writer.writerow(("problem_id_hash","N","eligible","answer_units","candidate_gap"))

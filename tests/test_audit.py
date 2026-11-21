@@ -62,3 +62,19 @@ class AuditTests(unittest.TestCase):
                     widths.append(worst)
                 ranked=sorted(map(abs,weights),reverse=True)
                 self.assertEqual(min(widths),sum(ranked[b:])+sum(ranked[:min(b,2*e)]))
+
+    def test_gold_review_allocation(self):
+        from audit import tier_design
+        weights=[-7,3,9,-5,2,4]
+        records=list(zip(weights,(True,False,False,True,False,True)))
+        for cost in (2,3):
+            for e in range(3):
+                for effort in range(10):
+                    optimum=sum(map(abs,weights))
+                    for status in product(range(3),repeat=len(weights)):
+                        if status.count(1)+cost*status.count(2)>effort:
+                            continue
+                        residual=sum(abs(d) for d,s in zip(weights,status) if s==0)
+                        residual+=sum(sorted((abs(d) for d,s in zip(weights,status) if s==1),reverse=True)[:2*e])
+                        optimum=min(optimum,residual)
+                    self.assertEqual(optimum,tier_design(records,effort,cost,e)['worst'])

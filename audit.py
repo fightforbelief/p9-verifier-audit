@@ -98,3 +98,25 @@ def summarize(units, denominator):
     return dict(units=count, A=a_total/denominator,B=b_total/denominator,gap=gap/denominator,
                 initial_width=width/denominator,random_width10=width*(count-budget)/count/denominator,
                 budget10=budget,policies=budgets,interval10=intervals,erase=radius)
+
+
+def tier_design(records, budget, cost, errors):
+    """Minimax fixed design. Ties between designs favor fewer infallible checks."""
+    from itertools import accumulate
+    if budget < 0 or cost < 1 or errors < 0:
+        raise ValueError("invalid design")
+    ranked = sorted(records,key=lambda row:abs(row[0]),reverse=True)
+    prefix = [0,*accumulate(abs(d) for d,_ in ranked)]
+    size = len(ranked)
+
+    def width(g):
+        regular = min(size-g,budget-cost*g)
+        end = g+regular
+        return prefix[-1]-prefix[end]+prefix[g+min(regular,2*errors)]-prefix[g]
+
+    gold = min(range(min(size,budget//cost)+1), key=width)
+    regular = min(size-gold,budget-cost*gold)
+    fixed = sum(d*y for d,y in ranked[:gold])
+    lo,hi = interval(ranked[gold:],regular,errors)
+    return dict(gold=gold,regular=regular,worst=width(gold),ordinary=width(0),
+                gold_only=prefix[-1]-prefix[min(size,budget//cost)],lo=fixed+lo,hi=fixed+hi)
