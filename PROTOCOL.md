@@ -15,3 +15,7 @@ Use absolute difference in selection mass for priority. Contrast with a symmetri
 ### Design extension before result inspection
 
 The main comparison uses equally costly binary judgments. We additionally study a hypothetical second, error-free review tier. Its cost is two or five ordinary judgments. With up to five errors among ordinary reviews, compute the exact minimax allocation at 1% and 10% of the number of answer units in ordinary-review credits. Costs and error allowances are sensitivity parameters. The archive provides no labor-time or human error measurements.
+
+### Follow-up after the AceMath replay
+
+The sign for Gaokao changes across N under the specified uniform-tie policy. To assess this finding, compute full-grade gaps under file-order and reversed file-order tie priority and under independent extreme within-score permutations for each verifier. Report the diagnostic for every subject and budget. This is an exploratory robustness check.
