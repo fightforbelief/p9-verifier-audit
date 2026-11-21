@@ -1,0 +1,39 @@
+\subsection{How often does the mixed design help?}
+The initial sensitivity grid contains 96 cells: eight collections, three generation budgets, two review budgets and two gold prices. Each cell compares the minimax width to the better of ordinary-only and gold-only review, with $e=5$. At the 1\% review budget, the combined design reduces width in 7 of 24 cells at price two and 2 of 24 at price five. At 10\% the counts are 15 and 14 respectively (differences above $10^{-10}$ percentage points). Across the 24 cells at the 10\% budget the median reductions are 0.037 and 0.013 points. These are factorial design cells on fixed archives, not independent model comparisons. The mixed design can help materially in individual settings, while most settings yield a small absolute improvement or a tie.
+
+\subsection{When the error allowance must be estimated}\label{sec:calibration}
+We use Lightman's original reference-answer strings to produce a provisional verdict for each answer unit. Literal matching accepts a nonempty exact match after stripping surrounding whitespace. A second rule also accepts exact rational equality for supported integer, decimal and simple fraction forms. Both ignore the published verdict when grading. The reliable return in this retrospective test is the archived first-occurrence verdict. Agreement measures fidelity to this declared target. It gives no estimate of human annotator accuracy. These simple rules permit a reproducible challenge to the small-error assumption on a corpus with released references.
+
+At each $N$, take the first 10\% of answer units by $|d_i|$ and discard zero-weight units from this prefix. Other nonzero units stay unreviewed. On this provisional set, the literal and rational rules exceed five discrepancies at every budget (Table~\ref{tab:proxies}). At $N=1{,}860$ a literal-grader interval computed with $e=5$ is $[2.0,4.0]$ points and the rational version gives $[3.0,5.0]$. Both exclude the archived gap of $5.8$ points despite retaining its sign. The original sensitivity examples at $e=5$ therefore cannot be interpreted as measured guarantees for either grading rule.
+
+We next calibrate as above, taking $s=\min(256,\lfloor |R|/4\rfloor)$ and $h=\min(128,\lfloor(|R|-s)/4\rfloor)$. Both graders share the same calibration sample within each $N$. Each cell uses $\alpha=1/120$, giving simultaneous coverage of at least 95\% across the six cells by the union bound. We compare adjudication of the largest remaining $|d_i|$ against the conditional design with identical $s,h$. At the two smaller generation budgets the two choices have equal worst-branch widths in the prespecified seed. At full depth the conditional split reduces that width from 20.0 to 17.4 points for literal matching and from 16.4 to 15.0 for rational matching. Every primary calibrated interval contains zero, including the rational full-depth interval whose lower endpoint is exactly zero.
+\begin{table}[htbp]\centering\small
+\caption{Observed disagreement and calibrated conditional-upgrade intervals. $k/s$ counts sampled disagreements, $e$ is the calibrated upper bound on remaining errors before upgrades, and $h$ counts subsequent checks. Endpoints are percentage points for the archived gap.}\label{tab:proxies}
+\begin{tabular}{rlrrrrr}\toprule
+$N$ & Grader & Disagree / $|R|$ & $k/s$ & $e$ & $h$ & Final interval\\\midrule
+8 & Literal & 273/9,481 & 11/256 & 775 & 128 & $[-7.28,8.89]$\\
+8 & Rational & 234/9,481 & 10/256 & 727 & 128 & $[-7.18,8.78]$\\
+32 & Literal & 285/9,481 & 5/256 & 478 & 128 & $[-6.70,9.85]$\\
+32 & Rational & 241/9,481 & 5/256 & 478 & 128 & $[-6.72,9.86]$\\
+1,860 & Literal & 34/290 & 7/72 & 50 & 54 & $[-1.20,13.80]$\\
+1,860 & Rational & 25/290 & 5/72 & 41 & 54 & $[0.00,12.80]$\\
+\bottomrule\end{tabular}
+\end{table}
+
+\paragraph{Comparison with direct probability sampling.}
+After seeing the primary results we added a comparator motivated by importance sampling for ranking comparisons \cite{schnabel}. It starts with the same provisional grades and leaves the same answers outside $R$ unknown. Split $R$ by the sign of $f_i$ and let $W_j$ be the total absolute weight in stratum $j$. Allocate $s+h$ draws in proportion to $W_j$, rounding to integer counts and ensuring at least one per nonempty stratum. Within each stratum sample independently with replacement with probabilities $|d_i|/W_j$. On each draw the disagreement indicator has mean equal to the unknown fraction of stratum weight that requires correction. Thus a binomial interval for each fraction, scaled by $W_j$ and signed, gives an interval for the correction to the provisional comparison. Add the sharp unknown endpoints outside $R$. We invert the two binomial tails per stratum, each at risk $1/480$, rounding endpoints outwards to a grid of $1/65536$. The resulting six-cell family has at least 95\% simultaneous coverage over random draws in each repetition. Repeated draws may reuse a grade. In the primary seed this used 322--330 distinct answers at the two smaller budgets (384 draws) and 108--109 at full depth (126 draws).
+
+\begin{table}[htbp]\centering\small
+\caption{Thirty-two sampling seeds on the same Lightman pool. Widths are medians in percentage points. Sign decisions count intervals strictly excluding zero. Each design uses the same upper limit on reliable checks.}\label{tab:control}
+\begin{tabular}{rlrrrr}\toprule
+& & \multicolumn{2}{c}{Median width} & \multicolumn{2}{c}{Sign decisions / 32}\\
+$N$ & Provisional rule & Upgrades & Sampling & Upgrades & Sampling\\\midrule
+8 & Literal   & 15.60 & 7.43 & 0 & 0\\
+8 & Rational  & 15.29 & 7.22 & 0 & 0\\
+32 & Literal  & 17.59 & 5.61 & 0 & 1\\
+32 & Rational & 16.74 & 5.41 & 0 & 3\\
+1,860 & Literal & 17.70 & 13.94 & 2 & 3\\
+1,860 & Rational & 14.40 & 12.05 & 5 & 12\\
+\bottomrule\end{tabular}
+\end{table}
+Direct sampling has the smaller median width in every cell (Table~\ref{tab:control}). At full depth with rational grading it certifies the sign in 12 of 32 replays, compared with five for calibrated upgrades and one for magnitude-only upgrades. These repetitions vary which units are checked on one archive. They describe sampling variability and supply no additional independent model pairs. A defensible externally specified error ceiling permits a deterministic audit. When the ceiling itself must be estimated, direct sampling can spend the same checks on estimating the weighted correction, a substantial advantage in this replay.

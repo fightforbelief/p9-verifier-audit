@@ -1,0 +1,16 @@
+\subsection{Choosing which provisional judgments to adjudicate}
+Consider a different point in an audit. The ordinary reports on $R$ have arrived. A reviewer can now afford $h$ reliable checks of distinct entries in $R$. Keep the rest of the benchmark fixed. The allowance $e$ refers to the original $R$, hence finding $k$ discrepancies leaves at most $e-k$ errors. This distinction matters when an existing automatic grader can supply provisional reports before expensive verification.
+
+\paragraph{Conditional design theorem.}
+Classify entries by the sign of $f_i=d_i(1-2z_i)$ and sort their absolute weights in decreasing order within each class. Zero effects can be placed in either class. For class $j$ let $T_j(t,e)$ be the sum of the next $e$ weights after its first $t$, counting all available weights if fewer remain. The smallest worst-branch width after $h$ upgrades, including over sequential deterministic choices of the entries, is
+\[
+ \sum_{i\in U}|d_i|+\min_{t}\left[T_-(t,e)+T_+(h-t,e)\right],
+\]
+where both allocations must fit their class sizes. Upgrade the respective prefixes. Sorting takes $O(|R|\log |R|)$ and the split search takes $O(h)$ with prefix sums.
+
+For any deterministic strategy, follow the branch on which every reliable check confirms its provisional grade. This branch is feasible even at $e=0$. Its unresolved width is the sum of the largest $e$ remaining positive effects and the largest $e$ remaining negative magnitudes, plus the fixed unknown width. For each split, removing the largest weights on each side minimizes both terms by exchange. This lower-bounds every strategy. Select the minimizing split in advance. A branch with $k$ discrepancies has the same remaining lists and a smaller or equal allowance $e-k$. Its width cannot exceed the all-confirming branch's width, which proves attainment. The objective concerns width conditional on the provisional transcript. A strategy optimized for the probability of an early sign decision has a different objective.
+
+For example, take provisional correction effects $(-8,10,10)$ in common weight units with $e=h=1$. Checking either size-ten entry leaves worst-case width $18$ on this group. Checking the size-eight entry leaves width $10$ because every remaining correction has the same direction.
+
+\paragraph{An allowance with measured risk.}
+Draw $s$ units uniformly without replacement from a score-selected $R$ of size $m$, adjudicate them, and count $k$ discrepancies. For $H_K\sim\mathrm{Hypergeom}(m,K,s)$ let $K^+=\max\{K:\Pr(H_K\leq k)>\alpha\}$ over feasible totals. The lower-tail test has size at most $\alpha$ by discreteness. Its inversion upper-bounds the total discrepancy count with probability at least $1-\alpha$. Remove the sampled entries and use $e=K^+-k$ on the remainder. On that single coverage event all subsequent deterministic intervals contain the stipulated target. If later checks exhaust the allowance and reveal another discrepancy, the compatible set is empty and the audit must report that outcome. This construction requires a reliable comparison grade on sampled units and an actual probability sample. Only this calibration step carries sampling risk. The finite-population inversion itself is standard.

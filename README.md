@@ -8,6 +8,8 @@ When two mathematical verifiers see the same candidate solutions, how many final
 
 At eight draws on AceMath MATH-500, 437 answer checks certify the 72B model's 1.21-point lead if returned checks are correct. Reviewing individual responses with the same priority takes 11,942 checks. Thirteen adverse answer-grade changes could erase the fully graded lead. These are finite-pool replay results. The grades come from the public archives. Across 1,390,800 eligible responses, the Lightman release contained one group of 67 responses with the same extracted answer but conflicting grades. We report the original response-level comparison and the sensitivity to assigning one answer-level grade. Reviewer time and future model performance were outside the estimand.
 
+With provisional grades in hand, the optimal reliable checks depend on the direction in which each mistaken grade would move the comparison. In the Lightman replay two reference-string graders both exceeded the illustrative five-error allowance. Their full-pool intervals under that allowance missed the archived gap. After calibration, the primary audit left all six signs unresolved. At the same check budget direct probability sampling had smaller median widths across 32 seeds in each cell. See the [grader replay](reports/grader-replay.json), [sampling comparison](reports/sampling-control.json) and [review assessment](RESEARCH_DECISION.md).
+
 ## Reproduce the tables
 
 Research computation uses Python 3.12.10 and the standard library on Windows. From the project root, create a project-local environment once. Each run reuses this environment. Public releases provide both scores and final-answer grades. Downloads require network access, curl, and roughly 2.3 GB of source data plus temporary space. The resumable downloader keeps an additional copy in chunks.
@@ -21,10 +23,13 @@ $py = '.\.venv\Scripts\python.exe'
 .\Run-Study.ps1 lightman
 & $py tie_sensitivity.py lightman gsm8k math500 minerva_math gaokao2023en olympiadbench college_math mmlu_stem
 & $py question_review.py lightman gsm8k math500 minerva_math gaokao2023en olympiadbench college_math mmlu_stem
+& $py -m unittest discover -s tests -v
+& $py grader_replay.py
+& $py sampling_control.py
 & $py verify_reports.py
 ```
 
-Each command should finish successfully before starting the next. For an already downloaded official OpenAI blob, place it at `data/scored-test-samples.jsonl`. The main runner checks the publisher's digest. An optional transport route runs `project_input.py SOURCE data/lightman-fields.jsonl.gz` to project five fields and record source and content hashes before copying to another machine. For AceMath the downloader pins the [dataset revision](https://huggingface.co/datasets/nvidia/AceMath-RewardBench/tree/4dcc58ef82ddc5915be91f9b4f2c18c8b503a0e4). The [OpenAI evaluator](https://github.com/openai/prm800k/blob/main/prm800k/eval/eval.py) specifies the full-attempt denominator.
+Each command should finish successfully before starting the next. For an already downloaded official OpenAI blob, place it at `data/scored-test-samples.jsonl`. The two grading experiments require the full blob with reference strings. The main runner checks the publisher's digest. An optional transport route runs `project_input.py SOURCE data/lightman-fields.jsonl.gz` to project five fields and record source and content hashes before copying to another machine. For AceMath the downloader pins the [dataset revision](https://huggingface.co/datasets/nvidia/AceMath-RewardBench/tree/4dcc58ef82ddc5915be91f9b4f2c18c8b503a0e4). The [OpenAI evaluator](https://github.com/openai/prm800k/blob/main/prm800k/eval/eval.py) specifies the full-attempt denominator.
 
 Per-subject JSON files give integer-derived results, input and script digests, the interpreter version and platform. The CSV files hold one row per question and budget, with a hashed problem identifier. The `ties-*.json` files give full-grade sensitivity to tie priority. The `question-*.json` files count whole-problem checks and the minimum number of problems containing adverse grade changes. Raw solutions stay at the providers. Source material remains subject to its original terms. To rebuild the paper's presentation from returned reports, use Python with Matplotlib 3.10 and Tectonic.
 

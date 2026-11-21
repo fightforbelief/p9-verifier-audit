@@ -1,0 +1,239 @@
+{
+  "source_sha256": "46a01478dceefe8194304f9e2db92fedefab8c8cc47033a9d7e059f3b18c5f82",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "results": {
+    "8": {
+      "units": 94816,
+      "ordinary": 9481,
+      "calibration": 256,
+      "upgrades": 128,
+      "graders": {
+        "literal": {
+          "total_disagreements": 702,
+          "reviewed_disagreements": 273,
+          "fixed_five_interval": [
+            -0.022295114428924217,
+            0.03332126445907219
+          ],
+          "fixed_five_contains_target": true,
+          "target": 0.006926839836729476,
+          "calibration_errors": 11,
+          "remaining_upper": 775,
+          "before_upgrades": [
+            -0.12288660843889987,
+            0.11800897440422077
+          ],
+          "policies": {
+            "magnitude": {
+              "disagreements": 13,
+              "match_width": 0.162328853236561,
+              "endpoints": [
+                -0.07283208550441057,
+                0.08890148864769806
+              ]
+            },
+            "conditional": {
+              "disagreements": 13,
+              "match_width": 0.162328853236561,
+              "endpoints": [
+                -0.07283208550441057,
+                0.08890148864769806
+              ]
+            }
+          }
+        },
+        "rational": {
+          "total_disagreements": 656,
+          "reviewed_disagreements": 234,
+          "fixed_five_interval": [
+            -0.02106381908164066,
+            0.03455255980635575
+          ],
+          "fixed_five_contains_target": true,
+          "target": 0.006926839836729476,
+          "calibration_errors": 10,
+          "remaining_upper": 727,
+          "before_upgrades": [
+            -0.12159421244936484,
+            0.11679239668053942
+          ],
+          "policies": {
+            "magnitude": {
+              "disagreements": 9,
+              "match_width": 0.1600717382420096,
+              "endpoints": [
+                -0.07183474871046035,
+                0.08779836023102167
+              ]
+            },
+            "conditional": {
+              "disagreements": 9,
+              "match_width": 0.1600717382420096,
+              "endpoints": [
+                -0.07183474871046035,
+                0.08779836023102167
+              ]
+            }
+          }
+        }
+      }
+    },
+    "32": {
+      "units": 94816,
+      "ordinary": 9481,
+      "calibration": 256,
+      "upgrades": 128,
+      "graders": {
+        "literal": {
+          "total_disagreements": 702,
+          "reviewed_disagreements": 285,
+          "fixed_five_interval": [
+            -8.613117830191489e-05,
+            0.025843344090475888
+          ],
+          "fixed_five_contains_target": true,
+          "target": 0.020782046838361927,
+          "calibration_errors": 5,
+          "remaining_upper": 478,
+          "before_upgrades": [
+            -0.15079870397750317,
+            0.13791494852247682
+          ],
+          "policies": {
+            "magnitude": {
+              "disagreements": 12,
+              "match_width": 0.1668553459861186,
+              "endpoints": [
+                -0.06700030550832785,
+                0.09850518097290321
+              ]
+            },
+            "conditional": {
+              "disagreements": 12,
+              "match_width": 0.1668553459861186,
+              "endpoints": [
+                -0.06700030550832785,
+                0.09850518097290321
+              ]
+            }
+          }
+        },
+        "rational": {
+          "total_disagreements": 656,
+          "reviewed_disagreements": 241,
+          "fixed_five_interval": [
+            -0.00013525808961057785,
+            0.025794217179167224
+          ],
+          "fixed_five_contains_target": true,
+          "target": 0.020782046838361927,
+          "calibration_errors": 5,
+          "remaining_upper": 478,
+          "before_upgrades": [
+            -0.150850102394476,
+            0.1378611033452213
+          ],
+          "policies": {
+            "magnitude": {
+              "disagreements": 10,
+              "match_width": 0.16685969329836292,
+              "endpoints": [
+                -0.06717218883392022,
+                0.09856553935456872
+              ]
+            },
+            "conditional": {
+              "disagreements": 10,
+              "match_width": 0.16685969329836292,
+              "endpoints": [
+                -0.06717218883392022,
+                0.09856553935456872
+              ]
+            }
+          }
+        }
+      }
+    },
+    "1860": {
+      "units": 94816,
+      "ordinary": 290,
+      "calibration": 72,
+      "upgrades": 54,
+      "graders": {
+        "literal": {
+          "total_disagreements": 702,
+          "reviewed_disagreements": 34,
+          "fixed_five_interval": [
+            0.02,
+            0.04
+          ],
+          "fixed_five_contains_target": false,
+          "target": 0.058,
+          "calibration_errors": 7,
+          "remaining_upper": 50,
+          "before_upgrades": [
+            -0.06,
+            0.14
+          ],
+          "policies": {
+            "magnitude": {
+              "disagreements": 8,
+              "match_width": 0.2,
+              "endpoints": [
+                -0.032,
+                0.136
+              ]
+            },
+            "conditional": {
+              "disagreements": 12,
+              "match_width": 0.174,
+              "endpoints": [
+                -0.012,
+                0.138
+              ]
+            }
+          }
+        },
+        "rational": {
+          "total_disagreements": 656,
+          "reviewed_disagreements": 25,
+          "fixed_five_interval": [
+            0.03,
+            0.05
+          ],
+          "fixed_five_contains_target": false,
+          "target": 0.058,
+          "calibration_errors": 5,
+          "remaining_upper": 41,
+          "before_upgrades": [
+            -0.036,
+            0.128
+          ],
+          "policies": {
+            "magnitude": {
+              "disagreements": 7,
+              "match_width": 0.164,
+              "endpoints": [
+                -0.012,
+                0.124
+              ]
+            },
+            "conditional": {
+              "disagreements": 9,
+              "match_width": 0.15,
+              "endpoints": [
+                0.0,
+                0.128
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "grader_replay.py": "84f53e160e893f3d9e1cd8fdd7c0e4bf8245cf696673509213b6c2aabfa1adbc",
+    "adjudication.py": "89a93d4ce7f963e432ad22a0ea89e2e40dded624cba55e94a21143c2227a2a1c",
+    "audit.py": "5f406d64bd302b59e15ddbe0eeed68f00c2a11de62e6eeddd590c16aa3d92e65"
+  }
+}

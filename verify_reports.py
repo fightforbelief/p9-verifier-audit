@@ -53,6 +53,48 @@ def check(name):
     return d["problems"],d["eligible"]
 
 
+def check_grader_reports():
+    directory = Path("reports")
+    replay = json.loads((directory / "grader-replay.json").read_text())
+    seeds = json.loads((directory / "sampling-control.json").read_text())
+    archive = json.loads((directory / "lightman.json").read_text())
+    assert replay["source_sha256"] == archive["sha256"]["scored-test-samples.jsonl"]
+    for report in (replay, seeds):
+        for script, fingerprint in report["scripts"].items():
+            assert hashlib.sha256(Path(script).read_bytes()).hexdigest() == fingerprint, script
+    assert set(replay["results"]) == set(seeds["results"]) == {"8", "32", "1860"}
+    for n, cell in replay["results"].items():
+        entries = seeds["results"][n]
+        assert len(entries) == 64
+        reference = archive["results"][n]["answer"]
+        assert cell["units"] == reference["units"]
+        for grader, detail in cell["graders"].items():
+            target = detail["target"]
+            assert math.isclose(target, reference["gap"], abs_tol=1e-12)
+            lo, hi = detail["fixed_five_interval"]
+            assert (lo <= target <= hi) == detail["fixed_five_contains_target"]
+            if detail["reviewed_disagreements"] <= 5:
+                assert lo <= target <= hi
+            policies = detail["policies"]
+            assert policies["conditional"]["match_width"] <= policies["magnitude"]["match_width"] + 1e-12
+            actual_left = detail["reviewed_disagreements"] - detail["calibration_errors"]
+            if actual_left <= detail["remaining_upper"]:
+                for policy in policies.values():
+                    lo, hi = policy["endpoints"]
+                    assert lo - 1e-12 <= target <= hi + 1e-12
+                    assert hi - lo <= policy["match_width"] + 1e-12
+            runs = [r for r in entries if r["grader"] == grader]
+            assert sorted(r["offset"] for r in runs) == list(range(32))
+            for r in runs:
+                assert 0 < r["unique"] <= cell["calibration"] + cell["upgrades"]
+                assert r["pps"][0] <= r["pps"][1]
+                if r["offset"] == 0:
+                    assert r["upgrade"] == policies["conditional"]["endpoints"]
+                    assert r["magnitude"] == policies["magnitude"]["endpoints"]
+
+
 if __name__=="__main__":
     for name in (*SETS,"lightman"):
         print(name,*check(name))
+    check_grader_reports()
+    print("Grader replay and 32-seed control verified.")
