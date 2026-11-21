@@ -2,7 +2,7 @@
 
 Yunjie Guo and Hanqing Yang · Independent Researcher, Suzhou, China
 
-[Read the manuscript](paper/main.pdf) · [Study protocol and dated amendments](PROTOCOL.md) · [Machine-readable results](reports/)
+[PLOS ONE submission files](submission/plos-one/README.md) · [Author confirmations](submission/plos-one/AUTHOR_CONFIRMATIONS.md) · [Read the research version](paper/main.pdf) · [Study protocol and dated amendments](PROTOCOL.md) · [Machine-readable results](reports/)
 
 When two mathematical verifiers see the same candidate solutions, how many final-answer grades determine their ordering? This study computes an answer's exact chance of winning under each verifier and directs review toward the largest differences. It gives sharp bounds with missing or fallible grades, the fewest grade changes that erase a lead, and a minimax allocation for two review tiers with different costs.
 
