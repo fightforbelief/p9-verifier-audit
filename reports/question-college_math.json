@@ -1,0 +1,21 @@
+{
+  "dataset": "college_math",
+  "results": {
+    "8": {
+      "checks": 1462,
+      "erase": 14,
+      "gap": 0.0041573885652184716
+    },
+    "32": {
+      "checks": 1125,
+      "erase": 15,
+      "gap": 0.008439835597803072
+    },
+    "64": {
+      "checks": 731,
+      "erase": 18,
+      "gap": 0.012656730541755382
+    }
+  },
+  "source": "ed5dfd5aae3df78bcce5e023ddc2fd17107c73142e9992f5c1b7850891375355"
+}

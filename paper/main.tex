@@ -1,0 +1,88 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\makeatletter\let\rowinput\@@input\makeatother
+\newcommand{\D}{\Delta}
+\title{Certifying best-of-$N$ verifier comparisons with fallible answer judgments}
+\author{Yunjie Guo \qquad Hanqing Yang\\[2pt]
+\small Independent Researcher, Suzhou, China\\
+\small Correspondence: \texttt{hanqing.yang189@gmail.com}}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+\section{Which grades can change the decision?}
+A team replacing a verifier has a pool of mathematical solutions scored by both systems. In a best-of-$N$ trial each verifier chooses one solution from the same $N$ attempts. Getting the right answer earns one point. The comparison looks expensive to check if thousands of attempts exist per problem. Yet two solutions can carry the same final answer, and both verifiers may assign that answer nearly the same probability of winning. Even a difficult grading decision then has little effect on the comparison. Conversely, one mistaken judgment on a heavily favored answer can survive extensive review of other answers.
+
+We ask two operational questions. How many answers must be checked before every admissible completion of the grades gives the same ordering? Once all answers have grades, how many adverse changes suffice to erase that ordering? These questions address a fixed benchmark and a specified inference budget. Publishing a point estimate alone answers neither. A standard error across questions describes another source of variation.
+
+Our starting point is the classical idea of bounding differences between ranked systems with incomplete judgments \cite{carterette,tan}. We specialize it to the selection law of two mathematical verifiers, account exactly for ties and missing attempts, and pool repeated answer strings before prioritizing checks. We then allow errors in the judgments already returned. The main design result gives a sharp worst-case width for any combination of unreviewed, ordinarily reviewed and reliably adjudicated answers. It yields a closed-form ordering and a one-dimensional budget search. We test its practical implications by hiding and revealing archived final-answer grades. All grade changes and review costs in our sensitivity analyses are hypothetical.
+
+\section{Estimand and winner probabilities}
+For each of $Q$ equally weighted problems, fix $M$ generation slots, the returned answers, and two real-valued score vectors. Draw a size-$N$ subset of slots uniformly without replacement. Ignore ineligible attempts. If the subset has no eligible attempt, both systems receive zero. Each system selects a maximum-score eligible candidate, breaking ties uniformly. Both systems can be compared on the same draw even though their marginal winner distributions suffice for a difference in mean accuracy. This calculation does not identify how frequently they disagree on a particular draw.
+
+Number eligible slots in descending score order starting at one. With distinct scores, rank $r$ wins with probability
+\[
+ p_r(N)=\binom{M-r}{N-1}\big/\binom{M}{N}.
+\]
+The other $N-1$ draws must come from lower ranks or missing slots. For a tie block occupying ranks $r$ through $s$, assign each member the average of $p_r,\ldots,p_s$. To see this, randomly permute that block before the draw. The first selected member in this permutation is uniformly distributed over the sampled members of the block. Thus scores may be discrete and even an all-tied block is admissible. A binomial coefficient is zero when its lower argument exceeds its upper argument.
+
+Let an audit unit $i$ denote an exact answer within a problem, or a single response when rationale correctness is the target or answer grades cannot be shared. Write $a_i,b_i$ for the two winner probabilities summed over the unit's members and divided by $Q$. Let $d_i=a_i-b_i$ and $y_i\in\{0,1\}$ be the grade. The benchmark improvement is $\D=\sum_i d_i y_i$. Each problem has the same total eligible-winner mass under both systems, hence $\sum_i d_i=0$. Before any review the upper endpoint is half the $\ell_1$ distance between the two mass vectors. Pooling answer-equivalent candidates can only shrink this distance, by the triangle inequality. Oppositely signed candidate differences can cancel exactly inside one answer. All calculations in the released runner use integer binomial counts and a common multiple of tie sizes through the sign comparison.
+
+\section{Partial review and erroneous judgments}
+Partition the units into $G$ (reliably adjudicated), $R$ (ordinary reviews) and $U$ (unreviewed). Read $z_i$ on $G\cup R$, assume $y_i=z_i$ on $G$, and permit at most $e$ discrepancies on $R$. For an unreviewed unit any binary grade is possible. Write $S_k(V)$ for the sum of the $k$ largest elements of a nonnegative multiset, taking all elements if necessary. Let $T=\sum_{G\cup R} d_i z_i$ and $f_i=d_i(1-2z_i)$. The sharp endpoints are
+\begin{align*}
+ L &= T+\sum_{U}\min(0,d_i)-S_e(\{(-f_i)_+:i\in R\}),\\
+ H &= T+\sum_{U}\max(0,d_i)+S_e(\{(f_i)_+:i\in R\}).
+\end{align*}
+Each endpoint is attained by independently setting the unknown grades and taking the most adverse permitted ordinary-label flips in its direction. The interval is the convex hull of feasible values. Its interior may contain unattainable gaps. $L>0$ or $H<0$ certifies the sign even when the audit is stopped after inspecting the endpoints. No sampling model for correctness is required. The error allowance must cover actual errors for that interpretation.
+
+For complete ordinary labels, orient $d$ toward the observed winner. Each label flip can reduce its margin by at most $[d_i(2z_i-1)]_+$. Sort the positive reductions. The shortest prefix whose sum reaches the margin is the exact minimum number of flips that erases a strict lead. A tie has radius zero. This sensitivity calculation locates how easily the result could change. It supplies no evidence that a published answer was graded incorrectly.
+
+\subsection{Optimal allocation across review tiers}
+Put $w_i=|d_i|$ and sort the weights $w_1\geq\cdots\geq w_m$. The worst-case width over all returned binary grades, for a fixed review design, is
+\begin{equation}
+ W(G,R,U)=\sum_{i\in U}w_i + S_{2e}(\{w_i:i\in R\}). \label{eq:width}
+\end{equation}
+Indeed, two truths compatible with a common transcript can disagree on at most $2e$ reviewed ordinary units. Conversely, split the largest $\min(2e,|R|)$ ordinary weights into two sets of at most $e$ each. On these units choose extreme grades to maximize the distance between truths. Set the transcript equal to the first truth on one set and to the second on the other. They agree on $G$ and may differ at every unreviewed unit. This attains (\ref{eq:width}). The two endpoints can involve different error locations.
+
+\paragraph{Design theorem.}
+Fix counts $g=|G|$ and $b=|R|$. An optimal fixed design sends the $g$ largest weights to reliable adjudication and the next $b$ to ordinary review. Its worst-case width, with $P_j=\sum_{i=1}^j w_i$, is
+\begin{equation}
+ P_m-P_{g+b}+P_{g+\min(b,2e)}-P_g. \label{eq:design}
+\end{equation}
+For a proof, exchange a smaller gold weight with a larger weight outside $G$. The affected term of (\ref{eq:width}) is coordinatewise nondecreasing, so moving the smaller weight outside cannot increase width. After arranging $G$, exchange a smaller ordinary weight $v$ with a larger unreviewed weight $u$. The tail sum on $U$ falls by $u-v$ and the top-$2e$ sum increases by at most $u-v$. Repeating these exchanges gives (\ref{eq:design}). When ordinary review costs one credit, gold costs an integer $c$, and $B$ credits are available, enumerate $0\leq g\leq\min(m,\lfloor B/c\rfloor)$ and set $b=\min(m-g,B-cg)$. A prefix sum evaluates each allocation in constant time after sorting. This solves a nonadaptive, worst-transcript width objective. It permits ties between optimal allocations and gives no promise of the shortest realized sign audit.
+
+Two boundaries clarify the role of review reliability. If $b\leq2e$, ordinary review cannot shrink the worst-case width at all. With $g=0$, $e=0$, the rule reduces to sorting by absolute mass difference. For an example where both tiers help, let the absolute weights be $(15,5,5,4,4,3,2,2)$. Give the first two positive signs and all others negative signs, and divide by 20 to obtain a difference of probability vectors. In unnormalized units, with $B=7$, $c=3$ and $e=1$, seven ordinary reviews leave a worst-case width of $22$. Two gold reviews with one remaining ordinary review leave $20$. One gold and four ordinary reviews reduce the width to $17$.
+
+\section{Evidence and comparisons}
+\input{methods}
+\input{results}
+\section{Relation to prior work}
+Carterette, Allan and Sitaraman \cite{carterette} choose relevance judgments to compare retrieval systems. Tan and Clarke's maximized effectiveness difference \cite{tan} bounds ranking differences over unknown judgments. The zero-error linear endpoints above belong to that tradition. Active comparison \cite{sawade} and active testing \cite{kossen} optimize statistical precision under limited labeling. Test-label corrections have changed model rankings on public benchmarks \cite{northcutt}. Our erasure radius holds model scores fixed and asks how few adverse corrections could suffice. Risk-limiting audits \cite{stark} can use random samples and a chosen risk limit to certify a decision. Our review counts impose a deterministic requirement over compatible truths. Comparing their cost with a sampling-based audit would also require specifying the acceptable risk of a wrong decision.
+
+Lightman et al. \cite{lightman} and Liu et al. \cite{ace} evaluate mathematical reward models through repeated subset draws. We study the effort and fragility of verifying their fixed-pool comparisons. Schweisthal et al. \cite{bon} use score ranks to estimate policy values for future samples via off-policy evaluation. Shah and Li \cite{hold} analyze the effects of repeated noisy scores and holdout evaluation. Here both score vectors are observed and fixed. Uncertainty enters through missing or potentially erroneous external grades. The rank probability and linear partial-information bound are established ingredients. The two-tier design and its application to shared answer judgments supply the new comparison analyzed here.
+
+\section{Scope and implications}
+A certificate attaches to the declared distribution over subsets, the tie policy, the fixed scores and the grading unit. It does not bound future prompt or generator shift. A solution can contain a faulty derivation and a correct final answer. Reviewing the process requires response-specific or step-specific judgments. Distinct strings can be mathematically equivalent, and unsupported canonicalization could merge inequivalent answers. Separate groups for distinct strings preserve more uncertainty. The sharpness statements range over independent binary assignments to the declared units. A known single correct option or known equivalences between strings would restrict that set. An adverse assignment need not correspond to changing a single mathematically consistent reference key. Errors may cluster by question or grader, and one incorrect reference can affect several units. The radius counts affected units, without assigning a probability or a cause. Reliable adjudication and constant costs are design assumptions that require evidence in a live deployment. Repeated checks by correlated judges need not yield a reliable tier.
+
+The practical output is an audit target with a stated unit and budget. A reviewer can report the observed improvement, the interval for unrevealed answers, and the fewest grade changes sufficient to erase the lead. These quantities answer different questions even when they come from the same released rankings.
+\paragraph{Data and software.} The repository includes the protocol, input hashes, exact evaluator, exhaustive checks, and per-problem results. The cited authors host the source data. \url{https://github.com/fightforbelief/p9-verifier-audit}
+\paragraph{Declarations.} The authors declare no competing interests and no specific funding for this work.
+\begin{thebibliography}{10}
+\bibitem{carterette} B. Carterette, J. Allan and R. Sitaraman. Minimal test collections for retrieval evaluation. SIGIR, 2006. \url{https://ciir.cs.umass.edu/pubfiles/ir-475.pdf}
+\bibitem{tan} L. Tan and C. L. A. Clarke. A family of rank similarity measures based on maximized effectiveness difference. IEEE TKDE, 2015. \url{https://arxiv.org/abs/1408.3587}
+\bibitem{sawade} C. Sawade, N. Landwehr and T. Scheffer. Active comparison of prediction models. NeurIPS, 2012. \url{https://proceedings.neurips.cc/paper_files/paper/2012/file/92fb0c6d1758261f10d052e6e2c1123c-Paper.pdf}
+\bibitem{northcutt} C. G. Northcutt, A. Athalye and J. Mueller. Pervasive label errors in test sets destabilize machine learning benchmarks. NeurIPS Datasets and Benchmarks, 2021. \url{https://arxiv.org/abs/2103.14749}
+\bibitem{kossen} J. Kossen et al. Active testing: Sample-efficient model evaluation. ICML, 2021. \url{https://proceedings.mlr.press/v139/kossen21a.html}
+\bibitem{stark} P. B. Stark. Sets of half-average nulls generate risk-limiting audits: SHANGRLA. Financial Cryptography and Data Security, 2020. \url{https://arxiv.org/abs/1911.10035}
+\bibitem{lightman} H. Lightman et al. Let's verify step by step. ICLR, 2024. \url{https://arxiv.org/abs/2305.20050}
+\bibitem{ace} Z. Liu et al. AceMath: Advancing frontier math reasoning with post-training and reward modeling. 2024. \url{https://arxiv.org/abs/2412.15084}
+\bibitem{bon} J. Schweisthal et al. Efficient Best-of-N policy evaluation for inference-time alignment. 2026. \url{https://arxiv.org/abs/2610.09250}
+\bibitem{hold} S. Shah and Y. Li. Holdout Best-of-N: Unbiased evaluation and its cost. 2026. \url{https://arxiv.org/abs/2610.08719}
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,21 @@
+{
+  "dataset": "math500",
+  "results": {
+    "8": {
+      "checks": 79,
+      "erase": 6,
+      "gap": 0.012073036620932386
+    },
+    "32": {
+      "checks": 49,
+      "erase": 6,
+      "gap": 0.019442609660863506
+    },
+    "64": {
+      "checks": 40,
+      "erase": 6,
+      "gap": 0.022
+    }
+  },
+  "source": "ed5dfd5aae3df78bcce5e023ddc2fd17107c73142e9992f5c1b7850891375355"
+}

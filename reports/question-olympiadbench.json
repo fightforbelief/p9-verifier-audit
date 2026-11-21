@@ -1,0 +1,21 @@
+{
+  "dataset": "olympiadbench",
+  "results": {
+    "8": {
+      "checks": 318,
+      "erase": 20,
+      "gap": 0.025143391107154835
+    },
+    "32": {
+      "checks": 226,
+      "erase": 18,
+      "gap": 0.0425117378922267
+    },
+    "64": {
+      "checks": 158,
+      "erase": 13,
+      "gap": 0.03851851851851852
+    }
+  },
+  "source": "ed5dfd5aae3df78bcce5e023ddc2fd17107c73142e9992f5c1b7850891375355"
+}

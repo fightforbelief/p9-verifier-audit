@@ -1,0 +1,21 @@
+{
+    "dataset": "lightman",
+    "results": {
+        "8": {
+            "checks": 265,
+            "erase": 3,
+            "gap": 0.006926839836729476
+        },
+        "32": {
+            "checks": 198,
+            "erase": 7,
+            "gap": 0.020782046838361927
+        },
+        "1860": {
+            "checks": 123,
+            "erase": 15,
+            "gap": 0.058
+        }
+    },
+    "source": "ed5dfd5aae3df78bcce5e023ddc2fd17107c73142e9992f5c1b7850891375355"
+}

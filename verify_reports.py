@@ -13,6 +13,8 @@ def check(name):
     d = json.loads(Path(f"reports/{name}.json").read_text(encoding="utf-8"))
     ties = json.loads(Path(f"reports/ties-{name}.json").read_text(encoding="utf-8"))
     assert ties["source"]==hashlib.sha256(Path("tie_sensitivity.py").read_bytes()).hexdigest()
+    question = json.loads(Path(f"reports/question-{name}.json").read_text(encoding="utf-8"))
+    assert question["source"]==hashlib.sha256(Path("question_review.py").read_bytes()).hexdigest()
     for script in ("run.py","audit.py","fetch_data.py"):
         assert d["sha256"][script]==hashlib.sha256(Path(script).read_bytes()).hexdigest(),script
     with Path(f"reports/{name}_problems.csv").open(newline="") as f:
@@ -23,6 +25,11 @@ def check(name):
         assert sum(int(r["eligible"]) for r in selected)==d["eligible"]
         a=x["answer"]
         c=x["candidate"]
+        block=question["results"][n]
+        assert math.isclose(a["gap"],block["gap"],abs_tol=1e-12)
+        assert 0<=block["erase"]<=min(d["problems"],a["erase"])
+        if block["checks"] is not None:
+            assert 1<=block["checks"]<=d["problems"]
         assert sum(int(r["answer_units"]) for r in selected)==a["units"]
         assert c["units"]==d["eligible"]
         assert math.isclose(mean(float(r["candidate_gap"]) for r in selected),c["gap"],abs_tol=1e-12)
