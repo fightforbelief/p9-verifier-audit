@@ -2,6 +2,7 @@
 import argparse
 from collections import defaultdict
 import csv
+import gzip
 import hashlib
 import json
 import platform
@@ -47,6 +48,24 @@ def load_ace(dataset):
 
 def load_openai():
     path = DATA / "scored-test-samples.jsonl"
+    compact = DATA / "lightman-fields.jsonl.gz"
+    if not path.is_file() and compact.is_file():
+        manifest = compact.with_suffix(".json")
+        meta = json.loads(manifest.read_text(encoding="utf-8"))
+        if meta["raw_md5"] != "b00756c70f195422c7855daed282205d":
+            raise ValueError("unexpected original source")
+        content = hashlib.sha256()
+        pools = defaultdict(list)
+        with gzip.open(compact,"rb") as f:
+            for line in f:
+                content.update(line)
+                problem,answer,a,b,y = json.loads(line)
+                rows = pools[problem]
+                if answer is not None:
+                    rows.append((answer,a,b,y))
+        if content.hexdigest()!=meta["content_sha256"] or len(pools)!=500:
+            raise ValueError("incomplete transport projection")
+        return pools,1860,[compact,manifest]
     with path.open('rb') as f:
         if hashlib.file_digest(f,'md5').hexdigest() != "b00756c70f195422c7855daed282205d":
             raise ValueError("OpenAI source mismatch")
